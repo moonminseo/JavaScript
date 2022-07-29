@@ -1,0 +1,52 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>끝말잇기</title>
+</head>
+
+<body>
+    <div><span id='order'>1</span>번째 참가자</div>
+    <div>제시어 : <span id='word'></span></div>
+    <input type='text'>
+    <button calss='btn'>입력</button>
+</body>
+<script>
+    let word; // 제시어
+    let newWord; // 새로 입력한 제시어
+    //prompt:입력창 alert:알림창 confirm:확인/취소
+    const number = Number(prompt('몇명이 참여하나요?'));
+    const $button = document.querySelector('button');
+    const $input = document.querySelector('input');
+    const $word = document.querySelector('#word');
+    const $order = document.querySelector('#order');
+    
+    const onClickButton = () => {
+        if (!word || word[word.length - 1] === newWord[0]) { //제시어가 비어져있거나 제시어가 비어져있지 않고 단어가 올바른 경우
+            word = newWord;
+            $word.textContent = word;
+            const order = Number($order.textContent);
+            if (order + 1 > number) {
+                $order.textContent = 1;
+            } else {
+                $order.textContent = order + 1;
+            }
+        } else { 
+                alert('단어가 올바르지 않습니다.');
+        }
+        $input.value = '';
+        $input.focus();
+    };
+    
+    const onInPut = (event) => {
+        newWord = event.target.value;
+    };
+    
+    $button.addEventListener('click', onClickButton);
+    $input.addEventListener('input', onInPut);
+
+</script>
+
+</html>

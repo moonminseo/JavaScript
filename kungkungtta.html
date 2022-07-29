@@ -1,0 +1,68 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿵쿵따</title>
+</head>
+
+<body>
+    <div><span id='order'>1</span>번째 참가자</div>
+    <div>제시어 : <span id='word'></span></div>
+    <input type='text'>
+    <button calss='btn'>입력</button>
+</body>
+<script>
+
+    //  1.prompt 몇명이 참여하는지 입력 받기
+    //  2.사용자가 취소를 누를 경우 코드 실행되지 않음
+    //  3.input 세글자 입력 받기
+    //  4.세글자가 아닐 경우 알림창으로 알리기
+
+    const number = Number(prompt('몇명이 참여하나요?'));
+    if (number) {
+        let word; // 제시어
+        let newWord; // 새로 입력한 제시어
+
+        const $order = document.querySelector('#order');
+        const $word = document.querySelector('#word');
+        const $button = document.querySelector('button');
+        const $input = document.querySelector('input');
+
+
+        const onInPut = (event) => {
+        newWord = event.target.value;
+    };
+        const onClickButton = () => {
+            if (!word || word[word.length - 1] === newWord[0]) {
+                if(newWord.length == 3){
+                    word = newWord;
+                    $word.textContent = word;
+                    const order = Number($order.textContent);
+                    if (order + 1 > number) {
+                        $order.textContent = 1;
+                    } else {
+                        $order.textContent = order + 1;
+                    }
+                }else{
+                    alert('세글자 단어를 입력해주세요.');
+                }
+            } else {
+                alert('단어가 올바르지 않습니다.');
+            }
+            $input.value = '';
+            $input.focus();
+        }
+
+
+        $button.addEventListener('click', onClickButton);
+        $input.addEventListener('input', onInPut);
+
+    } else {
+        alert('참여하지 않습니다.');
+    }
+
+</script>
+
+</html>

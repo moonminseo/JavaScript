@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가위바위보</title>
+    <style>
+        #computer {
+            width: 142px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id = "computer"></div>
+    <div>
+        <button id = "scissors" class="btn">가위</button>
+        <button id = "rock" class="btn">바위</button>
+        <button id = "paper" class="btn">보</button>
+        <button onclick="window.location.reload()">재시작</button>
+    </div>
+    <div id = "score">가위바위보 중에서 선택하세요</div>
+
+    <script>
+        const $computer = document.querySelector('#computer');
+        const $score = document.querySelector('#score');
+        const $scissors = document.querySelector('#scissors');
+        const $rock = document.querySelector('#rock');
+        const $paper = document.querySelector('#paper');
+        const IMG_URL = `./rsp.png`;
+        let Mescore = 0;
+        let Comscore = 0;
+        
+        const rspX ={
+            scissors : '0', //가위
+            rock : '-220px', //바위
+            paper : '-440px', //보
+        };
+        
+        let computerChoice = 'paper';
+        const ChangeComputerHand = () => {
+            if(computerChoice === 'scissors'){ //가위일 경우
+                computerChoice = 'rock';
+            } else if(computerChoice === 'rock'){  //바위일 경우
+                computerChoice = 'paper';
+            }else if(computerChoice === 'paper'){  //보일 경우
+                computerChoice = 'scissors';
+            }
+            console.log(computerChoice);
+            $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`; 
+            $computer.style.backgroundSize = 'auto 200px'; //가로너비 세로높이
+        };
+
+        const scoreTable = {
+            scissors : 1,
+            rock : 0,
+            paper : -1,
+        };
+
+        let msg = ''; 
+        // setInterval 일정 작업 반복 시 사용 clearInterval 사용하여 중지
+        let intervalId = setInterval(ChangeComputerHand,50);
+        let clickable = true;
+        const clickBtn = () => {
+            if(clickable){
+                clearInterval(intervalId);
+                clickable = false;
+                const myChoice = event.target.textContent === '가위'
+                ? 'scissors'
+                 : event.target.textContent === '바위'
+                  ? 'rock'
+                    : 'paper';
+                // 점수 계산
+                const myScore = scoreTable[myChoice];
+                const computerScore = scoreTable[computerChoice];
+                const diff = myScore - computerScore;
+                // diff === 2 || diff === -1 
+                // 2, -1은 승리조건, -2,1은 실패조건 
+                if([2,-1].includes(diff)){
+                    Mescore += 1;
+                    msg = '!승리!';
+                }else if([-2,1].includes(diff)){
+                    Comscore += 1;
+                    msg = '!실패!';
+                }else{
+                    msg = '!무승부!';
+                }
+                if(Mescore >= 3){
+                    $score.textContent = `!나의 승리! >> ${Mescore} : ${Comscore}`;
+                }else if(Comscore >= 3){
+                    $score.textContent = `!컴퓨터 승리! >> ${Mescore} : ${Comscore}`;
+                }else{
+                    $score.textContent = `${msg}`;
+                    setTimeout(() => {
+                        clickable = true;
+                        intervalId = setInterval(ChangeComputerHand,50);
+                    },1000);
+                }
+            }
+            
+        };
+
+
+        $scissors.addEventListener('click',clickBtn);
+        $rock.addEventListener('click',clickBtn);
+        $paper.addEventListener('click',clickBtn);
+
+    </script>
+</body>
+</html>
